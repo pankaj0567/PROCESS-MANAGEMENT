@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using PM.MVC.Utility;
 
 namespace PM.MVC
 {
@@ -29,8 +30,8 @@ namespace PM.MVC
                 options.CheckConsentNeeded = context => true;
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
-
-
+            services.AddSingleton<IAPIUrl, APIUrl>(serviceProvider => new APIUrl(Configuration.GetSection("BaseAddress").Value));
+            services.AddSingleton(typeof(IHttpClientHelper<>), typeof(HttpClientHelper<>));
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
 

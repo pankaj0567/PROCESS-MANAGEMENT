@@ -6,6 +6,6 @@ namespace PM.API.DAL
 {
     public interface IDbManager
     {
-      
+
     }
 }
