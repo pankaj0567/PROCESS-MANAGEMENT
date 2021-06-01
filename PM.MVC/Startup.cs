@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
@@ -8,6 +9,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.FileProviders;
 using PM.MVC.Utility;
 
 namespace PM.MVC
@@ -32,6 +34,13 @@ namespace PM.MVC
             });
             services.AddSingleton<IAPIUrl, APIUrl>(serviceProvider => new APIUrl(Configuration.GetSection("BaseAddress").Value));
             services.AddSingleton(typeof(IHttpClientHelper<>), typeof(HttpClientHelper<>));
+            services.AddSession(options => {
+                options.IdleTimeout = TimeSpan.FromMinutes(1);//You can set Time   
+            });
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddSingleton<IFileProvider>(
+                   new PhysicalFileProvider(
+                       Path.Combine(Directory.GetCurrentDirectory(), "wwwroot")));
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
 
@@ -49,12 +58,12 @@ namespace PM.MVC
 
             app.UseStaticFiles();
             app.UseCookiePolicy();
-
+            app.UseSession();
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
                     name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
+                    template: "{controller=Login}/{action=Login}/{id?}");
             });
         }
     }

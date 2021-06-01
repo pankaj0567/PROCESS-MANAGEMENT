@@ -1,7 +1,8 @@
-﻿@model IEnumerable<PM.Model.Model.UserDetails>
-
+﻿@model IEnumerable<PM.Model.Model.UserViewModel>
+@using PM.Model.Model;
 @{
     ViewData["Title"] = "Index";
+    UserDetails userDetails = httpContextAccessor.HttpContext.Session.GetObject<UserDetails>(nameof(UserDetails));
 }
 
 <h2>Index</h2>
@@ -12,36 +13,73 @@
 <table class="table">
     <thead>
         <tr>
+            @if (userDetails.RoleMatrixId != 3)
+            {
+                <th>
+                    @Html.DisplayNameFor(model => model.First().UserDetails.UserName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.First().UserDetails.UserPassword)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.First().UserDetails.RoleMatrixId)
+                </th>
+            }
             <th>
-                @Html.DisplayNameFor(model => model.UserName)
+                @Html.DisplayNameFor(model => model.First().UserProfile.FullName)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.UserPassword)
+                @Html.DisplayNameFor(model => model.First().UserProfile.Email)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.RoleMatrixId)
+                @Html.DisplayNameFor(model => model.First().UserProfile.Phone)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.First().UserProfile.CommunicationAddress)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.First().UserProfile.Status)
             </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.UserName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.UserPassword)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.RoleMatrixId)
-            </td>
-            <td>
-                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                @if (userDetails.RoleMatrixId != 3)
+                {
+                    <td>
+                        @Html.DisplayFor(modelItem => item.UserDetails.UserName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.UserDetails.UserPassword)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.UserDetails.RoleMatrixId)
+                    </td>
+                }
+                <td>
+                    @Html.DisplayFor(modelItem => item.UserProfile.FullName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UserProfile.Email)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UserProfile.Phone)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UserProfile.CommunicationAddress)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UserProfile.Status)
+                </td>
+                <td>
+                    @*@Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+                        @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+                        @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })*@
+                </td>
+            </tr>
+        }
     </tbody>
 </table>

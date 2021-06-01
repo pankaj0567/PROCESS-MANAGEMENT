@@ -15,25 +15,28 @@ namespace PM.API.Controllers
     {
         #region Fields
         private readonly IUserDetailsDbManager userDetailsDbManager;
+        private readonly IUserProfileDbManager userProfileDbManager;
 
         #endregion
 
         #region Ctor
-        public LoginController(IUserDetailsDbManager userDetailsDbManager)
+        public LoginController(IUserDetailsDbManager userDetailsDbManager,
+                                IUserProfileDbManager userProfileDbManager)
         {
             this.userDetailsDbManager = userDetailsDbManager ?? throw new ArgumentNullException(nameof(userDetailsDbManager));
+            this.userProfileDbManager = userProfileDbManager;
         }
         #endregion
 
         #region API Methods
 
         [HttpPost("Registration")]
-        public IActionResult Registration(UserDetails userDetails)
+        public IActionResult Registration(UserProfile userProfile)
         {
             try
             {
-                if (this.userDetailsDbManager.Create(userDetails))
-                    return Created("Created successfully", userDetails);
+                if (this.userProfileDbManager.Create(userProfile,1))
+                    return Created("Created successfully", userProfile);
 
                 return BadRequest();
             }
@@ -41,7 +44,20 @@ namespace PM.API.Controllers
             {
                 return BadRequest();
             }
-        } 
+        }
+
+        [HttpPost("Login")]
+        public IActionResult Login(UserDetails userDetails)
+        {
+            try
+            {
+                return Ok(this.userDetailsDbManager.ValidateUser(userDetails));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest();
+            }
+        }
         #endregion
     }
 }

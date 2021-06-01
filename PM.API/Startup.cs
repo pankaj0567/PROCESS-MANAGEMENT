@@ -32,6 +32,23 @@ namespace PM.API
             {
                 return new UserDetailsDbManager(new WebConfiguration(Configuration.GetConnectionString("DefaultConnection")));
             });
+
+            var mailNetworkCredential = new MailNetworkCredential();
+            Configuration.GetSection("MailNetworkCredential").Bind(mailNetworkCredential);
+            services.AddSingleton<IUserProfileDbManager, UserProfileDbManager>(serviceProvider =>
+            {
+                return new UserProfileDbManager(new WebConfiguration(Configuration.GetConnectionString("DefaultConnection")), mailNetworkCredential);
+            });
+
+            services.AddSingleton<IMailNetworkCredential, MailNetworkCredential>(serviceProvider =>
+            {
+                
+                return mailNetworkCredential;
+            });
+
+
+            
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

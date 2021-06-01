@@ -15,28 +15,63 @@ namespace PM.API.Controllers
     {
         #region Fields
         private readonly IUserDetailsDbManager userDetailsDbManager;
+        private readonly IUserProfileDbManager userProfileDbContext;
 
         #endregion
 
         #region Ctor
-        public UserController(IUserDetailsDbManager userDetailsDbManager)
+        public UserController(IUserDetailsDbManager userDetailsDbManager, IUserProfileDbManager userProfileDbContext)
         {
             this.userDetailsDbManager = userDetailsDbManager ?? throw new ArgumentNullException(nameof(userDetailsDbManager));
+            this.userProfileDbContext = userProfileDbContext ?? throw new ArgumentNullException(nameof(userProfileDbContext));
         }
         #endregion
 
         #region API Methods
 
         [HttpGet("GetAll")]
-        public IEnumerable<UserDetails> GetAll()
+        public IEnumerable<UserViewModel> GetAll(int Role)
         {
             try
             {
-                return userDetailsDbManager.GetAll();
+                return userDetailsDbManager.GetAll(Role);
             }
             catch (Exception ex)
             {
-                return new List<UserDetails>();
+                return new List<UserViewModel>();
+            }
+        }
+
+        [HttpPost("PostUserProfile")]
+        public IActionResult PostUserProfile(UserProfile userProfile)
+        {
+            try
+            {
+                if (this.userProfileDbContext.Create(userProfile))
+                    return Created("Created successfully", userProfile);
+
+                return BadRequest();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest();
+            }
+        }
+
+
+        [HttpPut("PutBulkInsert")]
+        public IActionResult PutBulkInsert([FromForm]Model.Model.File file)
+        {
+            try
+            {
+                if (this.userDetailsDbManager.BulkInsertFile(file))
+                    return Ok();
+
+                return BadRequest();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest();
             }
         }
         #endregion

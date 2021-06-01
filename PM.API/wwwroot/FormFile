@@ -1,0 +1,12 @@
+UserName,UserPassword,RoleMatrixId,FullName,Email,Phone,CommunicationAddress,Status,UserName
+PT0011,123456,,pankaj,pankaj@gmail.com,123456,h no 35,TRUE,PT001
+PT0022,123456,,pankaj,pankaj@gmail.com,12345678,h no 35,TRUE,PT002
+PT0033,123456,,pankaj,pankaj@gmail.com,3,h no 35,TRUE,PT003
+PT0044,123456,,pankaj,,0,,TRUE,PT004
+PT0045,123456,,pankajUPdate,,0,,FALSE,PT004
+PT0056,123456,,pankaj,,0,,FALSE,PT005
+PT0057,123456,,pankaj,,0,,TRUE,PT005
+PT0058,123456,,pankaj,,0,,TRUE,PT005
+PT0059,123456,,pankaj,,0,,TRUE,PT005
+PT0060,123456,,pankaj,,0,,TRUE,PT006
+PT0061,123456,,pankajUPdate,,0,,FALSE,PT006
